@@ -9,32 +9,34 @@ ASSIST/I Version 2.03, Copyright 1984, BDM Software.
 000000                                2          USING PROG2,15
 000000 1B77                           3          SR    7,7                INITIALIZE ACCUMULATOR
                                       4 *
-000002 E000 F04A 004F 0004A           5 MORE     XREAD CARD,79            READ IN FIRST LINE
-000008 5380 F04A            0004A     6          XDECI 8,CARD             CONVERT FIRST NUMBER
+000002 E000 F050 004F 00050           5 MORE     XREAD CARD,79            READ IN FIRST LINE
+000008 5380 F050            00050     6          XDECI 8,CARD             CONVERT FIRST NUMBER
 00000C 4740 F03E            0003E     7          BC    B'0100',DONE       BRANCH TO DONE IF INVALID (SENTINEL)
-000010 5280 F0FD            000FD     8          XDECO 8,PLINE+21         PLACE NUMBER IN PRINTING INPUT LINE
-000014 E020 F0E8 004F 000E8           9          XPRNT PLINE,79           PRINT INPUT WITH "THE NUMBER IS"
+000010 5280 F103            00103     8          XDECO 8,PLINE+21         PLACE NUMBER IN PRINTING INPUT LINE
+000014 E020 F0EE 004F 000EE           9          XPRNT PLINE,79           PRINT INPUT WITH "THE NUMBER IS"
 00001A 1A78                          10          AR    7,8                ADD NUMBER TO RUNNING TOTALS
 00001C 47F0 F020            00020    11          BC    B'1111',SUBT       BRANCH TO SUBT FOR NEXT NUMBER
                                      12 *
-000020 E000 F099 004F 00099          13 SUBT     XREAD CARD2,79           READ IN NEXT LINE (NUMBER)
-000026 5360 F099            00099    14          XDECI 6,CARD2
-00002A 4740 F03E            0003E    15          BC    B'0100',DONE
-00002E 5260 F0FD            000FD    16          XDECO 6,PLINE+21
-000032 E020 F0E8 004F 000E8          17          XPRNT PLINE,79
-000038 1B76                          18          SR    7,6
-00003A 47F0 F002            00002    19          BC    B'1111',MORE
+000020 E000 F09F 004F 0009F          13 SUBT     XREAD CARD2,79           READ IN NEXT LINE (NUMBER)
+000026 5360 F09F            0009F    14          XDECI 6,CARD2            CONVERT SECOND NUMBER
+00002A 4740 F03E            0003E    15          BC    B'0100',DONE       BRANCH TO DONE IF INVALID (SENTINEL)
+00002E 5260 F103            00103    16          XDECO 6,PLINE+21         PLACE NUMBER IN PRINTING INPUT LINE
+000032 E020 F0EE 004F 000EE          17          XPRNT PLINE,79           PRINT INPUT WITH "THE NUMBER IS"
+000038 1B76                          18          SR    7,6                SUBTRACT SECOND NUMBER
+00003A 47F0 F002            00002    19          BC    B'1111',MORE       BRANCH TO MORE TO GET NEXT NUMBER
                                      20 *
-00003E 5270 F14D            0014D    21 DONE     XDECO 7,PLINE2+21
-000042 E020 F138 004F 00138          22          XPRNT PLINE2,79
-000048 07FE                          23          BCR   B'1111',14         EXIT PROGRAM
-                                     24 *
-00004A                               25 CARD     DS    CL79               STORAGE FOR INPUT
-000099                               26 CARD2    DS    CL79
-0000E8 40E3C8C540D5E4D4              27 PLINE    DC    CL80' THE NUMBER READ WAS'
-000138 40E3C8C540E2E4D4              28 PLINE2   DC    CL80' THE SUM IS: '
-                                     29 *
-                                     30          END   PROG2
+00003E E020 F18E 004F 0018E          21 DONE     XPRNT BLANK,79           PRINT SPACE (BLANK LINE)
+000044 5270 F153            00153    22          XDECO 7,PLINE2+21        ADD TOTAL TO LINE
+000048 E020 F13E 004F 0013E          23          XPRNT PLINE2,79          PRINT THE TOTAL
+00004E 07FE                          24          BCR   B'1111',14         EXIT PROGRAM
+                                     25 *
+000050                               26 CARD     DS    CL79               STORAGE FOR NUMBERS TO ADD
+00009F                               27 CARD2    DS    CL79               STORAGE FOR NUMBERS TO SUBTRACT
+0000EE 40E3C8C540D5E4D4              28 PLINE    DC    CL80' THE NUMBER READ WAS'
+00013E 40E3C8C540E2E4D4              29 PLINE2   DC    CL80' THE SUM IS: '
+00018E 5C40404040404040              30 BLANK    DC    CL79'*'            BLANK LINE
+                                     31 *
+                                     32          END   PROG2
 
 ***   0 STATEMENTS FLAGGED - 0 WARNINGS, 0 ERRORS
 
@@ -49,6 +51,7 @@ THE NUMBER READ WAS           58
 THE NUMBER READ WAS           61                                              
 THE NUMBER READ WAS           93                                              
 THE NUMBER READ WAS           26                                              
+                                                                              
 THE SUM IS:                   67                                              
 
 *** EXECUTION COMPLETED ***
