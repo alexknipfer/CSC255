@@ -1,8 +1,20 @@
 
-ASSIST/I Version 2.03, Copyright 1984, BDM Software.                             
+ASSIST/I Version 2.03, Copyright 1984, BDM Software.   
 
-
-                                                                                                                            PAGE 1
+************************************************************************
+*   FILE NAME: PROG2.PRT                       ASSIGNMENT#:  2         *
+*					 			       *
+*   AUTHOR _________________________________________________	       *
+*	           ALEX KNIPFER			                       *
+*   COURSE: CSC25500    SECTION: 11      DUE DATE: 10/1/2015           *
+*					                               *
+*   PURPOSE: THIS PROGRAM READS AN INPUT STREAM OF DATA. EACH LINE     *
+*       CONTAINS A SINGLE NUMBER. THE PROGRAM THEN PRINTS OUT EACH     *
+*       NUMBER READ. THEN ONCE A NEGATIVE NUMBER IS REACHED THE        *
+*       TERMINATES AND PRINTS THE TOTAL OF THE NUMBERS. THE NUMBERS    *
+*       ARE ADDED THEN SUBTRACTED ALTERNATING TO GENERATE THE TOTAL.   *
+************************************************************************                       
+                                                                                                                           PAGE 1
   LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
 
 000000                                1 PROG2    CSECT
@@ -11,7 +23,7 @@ ASSIST/I Version 2.03, Copyright 1984, BDM Software.
                                       4 *
 000002 E000 F050 004F 00050           5 MORE     XREAD CARD,79            READ IN FIRST LINE
 000008 5380 F050            00050     6          XDECI 8,CARD             CONVERT FIRST NUMBER
-00000C 4740 F03E            0003E     7          BC    B'0100',DONE       BRANCH TO DONE IF INVALID (SENTINEL)
+00000C 4740 F03E            0003E     7          BC    B'0100',DONE       BRANCH TO DONE IF NUMBER IS NEGATIVE
 000010 5280 F103            00103     8          XDECO 8,PLINE+21         PLACE NUMBER IN PRINTING INPUT LINE
 000014 E020 F0EE 004F 000EE           9          XPRNT PLINE,79           PRINT INPUT WITH "THE NUMBER IS"
 00001A 1A78                          10          AR    7,8                ADD NUMBER TO RUNNING TOTALS
@@ -19,7 +31,7 @@ ASSIST/I Version 2.03, Copyright 1984, BDM Software.
                                      12 *
 000020 E000 F09F 004F 0009F          13 SUBT     XREAD CARD2,79           READ IN NEXT LINE (NUMBER)
 000026 5360 F09F            0009F    14          XDECI 6,CARD2            CONVERT SECOND NUMBER
-00002A 4740 F03E            0003E    15          BC    B'0100',DONE       BRANCH TO DONE IF INVALID (SENTINEL)
+00002A 4740 F03E            0003E    15          BC    B'0100',DONE       BRANCH TO DONE IF NUMBER IS NEGATIVE
 00002E 5260 F103            00103    16          XDECO 6,PLINE+21         PLACE NUMBER IN PRINTING INPUT LINE
 000032 E020 F0EE 004F 000EE          17          XPRNT PLINE,79           PRINT INPUT WITH "THE NUMBER IS"
 000038 1B76                          18          SR    7,6                SUBTRACT SECOND NUMBER
@@ -42,6 +54,7 @@ ASSIST/I Version 2.03, Copyright 1984, BDM Software.
 
 *** PROGRAM EXECUTION BEGINNING -
 ANY OUTPUT BEFORE EXECUTION COMPLETE MESSAGE IS PRODUCED BY USER PROGRAM ***
+
 
 THE NUMBER READ WAS           36                                              
 THE NUMBER READ WAS           14                                              
