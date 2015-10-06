@@ -7,96 +7,101 @@ ASSIST/I Version 2.03, Copyright 1984, BDM Software.
 
 000000                                1 PROG3    CSECT
 000000                                2          USING PROG3,15
-000000 1B88                           3          SR    8,8                INITIALIZE BALANCE
-000002 1B44                           4          SR    4,4                NUMBER OF DEPOSITS
-000004 1B55                           5          SR    5,5                NUMBER OF WITHDRAWALS
-000006 1BDD                           6          SR    13,13              TOTAL WITHDRAWALS
-000008 1BCC                           7          SR    12,12              EVEN REGISTER FOR DIVISION
-00000A 1BAA                           8          SR    10,10              EVEN REGISTER FOR DIVISION
-00000C 1BBB                           9          SR    11,11              DEPOSIT TOTAL
-                                     10 *
-                                     11 ***<STEP 1>     PRINT COLUMN HEADERS AND READ IN INITIAL BALANCE
-                                     12 *
-00000E E020 F0B8 0050 000B8          13          XPRNT LABEL1,80          PRINT FIRST LINE OF TOP LABEL
-000014 E020 F108 004F 00108          14          XPRNT LABEL2,79          PRINT SECOND LINE OF TOP LABEL
-00001A E000 F333 004F 00333          15          XREAD CARD,79            READ IN BALANCE
-000020 5390 F333            00333    16          XDECI 9,CARD             CONVERT BALANCE TO NUMBER
-000024 5290 F2B6            002B6    17          XDECO 9,NUMLINE+35       CONVERT TO PRINT BALANCE
-000028 E020 F293 0050 00293          18          XPRNT NUMLINE,80         PRINT THE BALANCE
-00002E 1A89                          19          AR    8,9                ADD INITIAL BALANCE TO TOTAL
-                                     20 *
-                                     21 ***<STEP 2>     READ IN "CODE" (O OR 1) FOR DEPOSIT OR WITHDRAWAL
-                                     22 *
-000030 E000 F382 004F 00382          23 CODE     XREAD CARD2,79           READ IN NUMBER (0 OR 1)
-000036 4740 F08A            0008A    24          BC    B'0100',DONE       BRANCE TO DONE IF EOF
-00003A 5360 F382            00382    25          XDECI 6,CARD2            CONVERT TO NUMBER
-00003E 4780 F046            00046    26          BC    B'1000',DEP        BRANCH TO DEP IF 0
-000042 47F0 F068            00068    27          BC    B'1111',WITH       ELSE (1) BRANCH TO WITH
-                                     28 *
-                                     29 ***<STEP 3>     READ IN NUMBER TO DEPOSIT AND ADD TO BALANCE
-                                     30 *
-000046 5391 0000            00000    31 DEP      XDECI 9,0(1)             READ IN NEXT NUMBER
-00004A 5A40 F3D4            003D4    32          A     4,ONE              ADD ONE TO TOTAL
-00004E 1A89                          33          AR    8,9                ADD TO BALANCE
-000050 1AB9                          34          AR    11,9               ADD TO DEPOSIT TOTAL
-000052 5260 F2E3            002E3    35          XDECO 6,NUMLINE2+0       ADD CODE (0 OR 1) TO LINE
-000056 5290 F2F2            002F2    36          XDECO 9,NUMLINE2+15      ADD NUMBER TO DEPOSIT TO LINE
-00005A 5280 F306            00306    37          XDECO 8,NUMLINE2+35      ADD NEW BALANCE TO LINE
-00005E E020 F2E3 0050 002E3          38          XPRNT NUMLINE2,80        PRINT THE LINE
-000064 47F0 F030            00030    39          BC    B'1111',CODE       GO BACK AND READ NEXT CODE
-                                     40 *
-                                     41 ***<STEP 3>    READ IN NUMBER TO WITHDRAWAL AND SUBTRACT FROM BALANCE
-                                     42 *
-000068 5391 0000            00000    43 WITH     XDECI 9,0(1)             READ IN NEXT NUMBER
-00006C 5A50 F3D4            003D4    44          A     5,ONE              ADD ONE TO TOTAL
-000070 1B89                          45          SR    8,9                SUTRACT FROM BALANCE
-000072 1AD9                          46          AR    13,9               ADD TO WITHDRAWAL TOTAL
-000074 5260 F2E3            002E3    47          XDECO 6,NUMLINE2         ADD CODE(0 OR 1) TO LINE
-000078 5290 F2F2            002F2    48          XDECO 9,NUMLINE2+15      ADD NUMBER TO WITHDRAWAL LINE
-00007C 5280 F306            00306    49          XDECO 8,NUMLINE2+35      ADD NEW BALANCE TO LINE
-000080 E020 F2E3 0050 002E3          50          XPRNT NUMLINE2,80        PRINT THE LINE
-000086 47F0 F030            00030    51          BC    B'1111',CODE       GO BACK AND READ NEXT CODE
+                                      3 *
+                                      4 ***<STEP 1>    INITIALIZE REGISTERS TO 0
+                                      5 *
+000000 1B88                           6          SR    8,8                INITIALIZE BALANCE
+000002 1B44                           7          SR    4,4                NUMBER OF DEPOSITS
+000004 1B55                           8          SR    5,5                NUMBER OF WITHDRAWALS
+000006 1BDD                           9          SR    13,13              TOTAL WITHDRAWALS
+000008 1BCC                          10          SR    12,12              EVEN REGISTER FOR DIVISION
+00000A 1BAA                          11          SR    10,10              EVEN REGISTER FOR DIVISION
+00000C 1BBB                          12          SR    11,11              DEPOSIT TOTAL
+                                     13 *
+                                     14 ***<STEP 2>     PRINT COLUMN HEADERS AND READ IN INITIAL BALANCE
+                                     15 *
+00000E E020 F0BE 0050 000BE          16          XPRNT LABEL1,80          PRINT FIRST LINE OF TOP LABEL
+000014 E020 F10E 004F 0010E          17          XPRNT LABEL2,79          PRINT SECOND LINE OF TOP LABEL
+00001A E000 F389 004F 00389          18          XREAD CARD,79            READ IN BALANCE
+000020 5390 F389            00389    19          XDECI 9,CARD             CONVERT BALANCE TO NUMBER
+000024 5290 F2BC            002BC    20          XDECO 9,NUMLINE+35       CONVERT TO PRINT BALANCE
+000028 E020 F299 0050 00299          21          XPRNT NUMLINE,80         PRINT THE BALANCE
+00002E 1A89                          22          AR    8,9                ADD INITIAL BALANCE TO TOTAL
+                                     23 *
+                                     24 ***<STEP 3>     READ IN "CODE" (O OR 1) FOR DEPOSIT OR WITHDRAWAL
+                                     25 *
+000030 E000 F3D8 004F 003D8          26 CODE     XREAD CARD2,79           READ IN NUMBER (0 OR 1)
+000036 4740 F08A            0008A    27          BC    B'0100',DONE       BRANCE TO DONE IF EOF
+00003A 5360 F3D8            003D8    28          XDECI 6,CARD2            CONVERT TO NUMBER
+00003E 4780 F046            00046    29          BC    B'1000',DEP        BRANCH TO DEP IF 0
+000042 47F0 F068            00068    30          BC    B'1111',WITH       ELSE (1) BRANCH TO WITH
+                                     31 *
+                                     32 ***<STEP 4>     READ IN NUMBER TO DEPOSIT AND ADD TO BALANCE
+                                     33 *
+000046 5391 0000            00000    34 DEP      XDECI 9,0(1)             READ IN NEXT NUMBER
+00004A 5A40 F428            00428    35          A     4,ONE              ADD ONE TO TOTAL
+00004E 1A89                          36          AR    8,9                ADD TO BALANCE
+000050 1AB9                          37          AR    11,9               ADD TO DEPOSIT TOTAL
+000052 5260 F2E9            002E9    38          XDECO 6,NUMLINE2+0       ADD CODE (0 OR 1) TO LINE
+000056 5290 F2F8            002F8    39          XDECO 9,NUMLINE2+15      ADD NUMBER TO DEPOSIT TO LINE
+00005A 5280 F30C            0030C    40          XDECO 8,NUMLINE2+35      ADD NEW BALANCE TO LINE
+00005E E020 F2E9 0050 002E9          41          XPRNT NUMLINE2,80        PRINT THE LINE
+000064 47F0 F030            00030    42          BC    B'1111',CODE       GO BACK AND READ NEXT CODE
+                                     43 *
+                                     44 ***<STEP 5>    READ IN NUMBER TO WITHDRAWAL AND SUBTRACT FROM BALANCE
+                                     45 *
+000068 5391 0000            00000    46 WITH     XDECI 9,0(1)             READ IN NEXT NUMBER
+00006C 5A50 F428            00428    47          A     5,ONE              ADD ONE TO TOTAL
+000070 1B89                          48          SR    8,9                SUTRACT FROM BALANCE
+000072 1AD9                          49          AR    13,9               ADD TO WITHDRAWAL TOTAL
+000074 5260 F2E9            002E9    50          XDECO 6,NUMLINE2         ADD CODE(0 OR 1) TO LINE
+000078 5290 F2F8            002F8    51          XDECO 9,NUMLINE2+15      ADD NUMBER TO WITHDRAWAL LINE
 
                                                                                                                             PAGE 2
   LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
 
-                                     52 *
-                                     53 ***<STEP 4>    PRINT RESULTS THEN EXIT PROGRAM
-                                     54 *
-00008A 5250 F1C9            001C9    55 DONE     XDECO 5,WITHDRAW+35      ADD NUMBER OF WITHDRAWALS
-00008E E020 F1A6 004F 001A6          56          XPRNT WITHDRAW,79        PRINT WITHDRAWALS TOTAL
-000094 5240 F17A            0017A    57          XDECO 4,DEPOSIT+35       ADD NUMBER OF DEPOSITS
-000098 E020 F157 004F 00157          58          XPRNT DEPOSIT,79         PRINT DEPOSITS TOTAL
-                                     59 *
-                                     60 ***<CALCULATE AVERAGE AMOUNT PER CHECK>
-                                     61 *
-00009E 1DC5                          62          DR    12,5               DIVIDE FOR AVG PER CHECK
-0000A0 52D0 F218            00218    63          XDECO 13,AVGWITH+35      ADD CHECK AVG
-0000A4 E020 F1F5 004F 001F5          64          XPRNT AVGWITH            PRINT CHECK AVERAGE
+00007C 5280 F30C            0030C    52          XDECO 8,NUMLINE2+35      ADD NEW BALANCE TO LINE
+000080 E020 F2E9 0050 002E9          53          XPRNT NUMLINE2,80        PRINT THE LINE
+000086 47F0 F030            00030    54          BC    B'1111',CODE       GO BACK AND READ NEXT CODE
+                                     55 *
+                                     56 ***<STEP 6>    PRINT RESULTS THEN EXIT PROGRAM
+                                     57 *
+00008A E020 F339 0050 00339          58 DONE     XPRNT BLANK              PRINT BLANK LINE (SPACE)
+000090 5250 F1CF            001CF    59          XDECO 5,WITHDRAW+35      ADD NUMBER OF WITHDRAWALS
+000094 E020 F1AC 004F 001AC          60          XPRNT WITHDRAW,79        PRINT WITHDRAWALS TOTAL
+00009A 5240 F180            00180    61          XDECO 4,DEPOSIT+35       ADD NUMBER OF DEPOSITS
+00009E E020 F15D 004F 0015D          62          XPRNT DEPOSIT,79         PRINT DEPOSITS TOTAL
+                                     63 *
+                                     64 ***<CALCULATE AVERAGE AMOUNT PER CHECK>
                                      65 *
-                                     66 ***<CALCULATE AVERAGE AMOUNT PER DEPOSIT>
-                                     67 *
-0000AA 1DA4                          68          DR    10,4               DIVIDE FOR AVG PER DEPOSIT
-0000AC 52B0 F267            00267    69          XDECO 11,AVGDEP+35       ADD DEPOSIT AVG
-0000B0 E020 F244 004F 00244          70          XPRNT AVGDEP             PRINT DEPOSIT AVERAGE
+0000A4 1DC5                          66          DR    12,5               DIVIDE FOR AVG PER CHECK
+0000A6 52D0 F21E            0021E    67          XDECO 13,AVGWITH+35      ADD CHECK AVG
+0000AA E020 F1FB 004F 001FB          68          XPRNT AVGWITH            PRINT CHECK AVERAGE
+                                     69 *
+                                     70 ***<CALCULATE AVERAGE AMOUNT PER DEPOSIT>
                                      71 *
-0000B6 07FE                          72          BCR   B'1111',14         TERMINATE PROGRAM
-                                     73 *
-                                     74 ***********************************************************************
+0000B0 1DA4                          72          DR    10,4               DIVIDE FOR AVG PER DEPOSIT
+0000B2 52B0 F26D            0026D    73          XDECO 11,AVGDEP+35       ADD DEPOSIT AVG
+0000B6 E020 F24A 004F 0024A          74          XPRNT AVGDEP             PRINT DEPOSIT AVERAGE
+                                     75 *
+0000BC 07FE                          76          BCR   B'1111',14         TERMINATE PROGRAM
+                                     77 *
+                                     78 ***********************************************************************
                                         *
-0000B8 40404040E3D9C1D5              75 LABEL1   DC    CL80'    TRANSACTION        AMOUNT           BALANCE'
-000108 4040404040404040              76 LABEL2   DC    CL79'          CODE       (IN CENTS)        (IN CENTS)'
-000157 4040404040404040              77 DEPOSIT  DC    CL79'           # OF DEPOSITS         ='
-0001A6 4040404040404040              78 WITHDRAW DC    CL79'           # OF WITHDRAWALS      ='
-0001F5 4040404040404040              79 AVGWITH  DC    CL79'           AVG. AMT. PER CHECK   ='
-000244 4040404040404040              80 AVGDEP   DC    CL79'           AVG. AMT. PER DEPOSIT ='
-000293 5C40404040404040              81 NUMLINE  DC    CL80'*'
-0002E3 5C40404040404040              82 NUMLINE2 DC    CL80'*'
-000333                               83 CARD     DS    CL79
-000382                               84 CARD2    DS    CL79
-0003D4 00000001                      85 ONE      DC    F'1'
-                                     86 *
-                                     87          END   PROG3
+0000BE 40404040E3D9C1D5              79 LABEL1   DC    CL80'    TRANSACTION        AMOUNT           BALANCE'
+00010E 4040404040404040              80 LABEL2   DC    CL79'          CODE       (IN CENTS)        (IN CENTS)'
+00015D 4040404040404040              81 DEPOSIT  DC    CL79'           # OF DEPOSITS         ='
+0001AC 4040404040404040              82 WITHDRAW DC    CL79'           # OF WITHDRAWALS      ='
+0001FB 4040404040404040              83 AVGWITH  DC    CL79'           AVG. AMT. PER CHECK   ='
+00024A 4040404040404040              84 AVGDEP   DC    CL79'           AVG. AMT. PER DEPOSIT ='
+000299 5C40404040404040              85 NUMLINE  DC    CL80'*'
+0002E9 5C40404040404040              86 NUMLINE2 DC    CL80'*'
+000339 5C40404040404040              87 BLANK    DC    CL80'*'
+000389                               88 CARD     DS    CL79
+0003D8                               89 CARD2    DS    CL79
+000428 00000001                      90 ONE      DC    F'1'
+                                     91 *
+                                     92          END   PROG3
 
 ***   0 STATEMENTS FLAGGED - 0 WARNINGS, 0 ERRORS
 
@@ -130,6 +135,7 @@ ANY OUTPUT BEFORE EXECUTION COMPLETE MESSAGE IS PRODUCED BY USER PROGRAM ***
           0           1515               32969                                 
           0           9768               42737                                 
           1           4284               38453                                 
+                                                                               
           # OF WITHDRAWALS      =           11                                
           # OF DEPOSITS         =           13                                
           AVG. AMT. PER CHECK   =         3272                                
