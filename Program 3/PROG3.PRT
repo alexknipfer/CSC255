@@ -10,80 +10,93 @@ ASSIST/I Version 2.03, Copyright 1984, BDM Software.
 000000 1B88                           3          SR    8,8                INITIALIZE BALANCE
 000002 1B44                           4          SR    4,4                NUMBER OF DEPOSITS
 000004 1B55                           5          SR    5,5                NUMBER OF WITHDRAWALS
-000006 1BAA                           6          SR    10,10              TOTAL DEPOSITS
-000008 1BCC                           7          SR    12,12
-                                      8 *
-                                      9 ***<STEP 1>     PRINT COLUMN HEADERS AND READ IN INITIAL BALANCE
+000006 1BDD                           6          SR    13,13              TOTAL WITHDRAWALS
+000008 1BCC                           7          SR    12,12              EVEN REGISTER FOR DIVISION
+00000A 1BAA                           8          SR    10,10              EVEN REGISTER FOR DIVISION
+00000C 1BBB                           9          SR    11,11              DEPOSIT TOTAL
                                      10 *
-00000A E020 F0A8 0050 000A8          11          XPRNT LABEL1,80          PRINT FIRST LINE OF TOP LABEL
-000010 E020 F0F8 004F 000F8          12          XPRNT LABEL2,79          PRINT SECOND LINE OF TOP LABEL
-000016 E000 F323 004F 00323          13          XREAD CARD,79            READ IN BALANCE
-00001C 5390 F323            00323    14          XDECI 9,CARD             CONVERT BALANCE TO NUMBER
-000020 5290 F2A4            002A4    15          XDECO 9,NUMLINE+33       CONVERT TO PRINT BALANCE
-000024 E020 F283 0050 00283          16          XPRNT NUMLINE,80         PRINT THE BALANCE
-00002A 1A89                          17          AR    8,9                ADD INITIAL BALANCE TO TOTAL
-                                     18 *
-                                     19 ***<STEP 2>     READ IN "CODE" (O OR 1) FOR DEPOSIT OR WITHDRAWAL
+                                     11 ***<STEP 1>     PRINT COLUMN HEADERS AND READ IN INITIAL BALANCE
+                                     12 *
+00000E E020 F0B8 0050 000B8          13          XPRNT LABEL1,80          PRINT FIRST LINE OF TOP LABEL
+000014 E020 F108 004F 00108          14          XPRNT LABEL2,79          PRINT SECOND LINE OF TOP LABEL
+00001A E000 F333 004F 00333          15          XREAD CARD,79            READ IN BALANCE
+000020 5390 F333            00333    16          XDECI 9,CARD             CONVERT BALANCE TO NUMBER
+000024 5290 F2B6            002B6    17          XDECO 9,NUMLINE+35       CONVERT TO PRINT BALANCE
+000028 E020 F293 0050 00293          18          XPRNT NUMLINE,80         PRINT THE BALANCE
+00002E 1A89                          19          AR    8,9                ADD INITIAL BALANCE TO TOTAL
                                      20 *
-00002C E000 F372 004F 00372          21 CODE     XREAD CARD2,79           READ IN NUMBER (0 OR 1)
-000032 4740 F086            00086    22          BC    B'0100',DONE       BRANCE TO DONE IF EOF
-000036 5360 F372            00372    23          XDECI 6,CARD2            CONVERT TO NUMBER
-00003A 4780 F042            00042    24          BC    B'1000',DEP        BRANCH TO DEP IF 0
-00003E 47F0 F064            00064    25          BC    B'1111',WITH       ELSE (1) BRANCH TO WITH
-                                     26 *
-                                     27 ***<STEP 3>     READ IN NUMBER TO DEPOSIT AND ADD TO BALANCE
+                                     21 ***<STEP 2>     READ IN "CODE" (O OR 1) FOR DEPOSIT OR WITHDRAWAL
+                                     22 *
+000030 E000 F382 004F 00382          23 CODE     XREAD CARD2,79           READ IN NUMBER (0 OR 1)
+000036 4740 F08A            0008A    24          BC    B'0100',DONE       BRANCE TO DONE IF EOF
+00003A 5360 F382            00382    25          XDECI 6,CARD2            CONVERT TO NUMBER
+00003E 4780 F046            00046    26          BC    B'1000',DEP        BRANCH TO DEP IF 0
+000042 47F0 F068            00068    27          BC    B'1111',WITH       ELSE (1) BRANCH TO WITH
                                      28 *
-000042 5391 0000            00000    29 DEP      XDECI 9,0(1)             READ IN NEXT NUMBER
-000046 5A40 F3C4            003C4    30          A     4,ONE              ADD ONE TO TOTAL
-00004A 1A89                          31          AR    8,9                ADD TO BALANCE
-00004C 1AA9                          32          AR    10,9               ADD TO DEPOSIT TOTAL
-00004E 5260 F2D3            002D3    33          XDECO 6,NUMLINE2         ADD CODE (0 OR 1) TO LINE
-000052 5290 F2E2            002E2    34          XDECO 9,NUMLINE2+15      ADD NUMBER TO DEPOSIT TO LINE
-000056 5280 F2F4            002F4    35          XDECO 8,NUMLINE2+33      ADD NEW BALANCE TO LINE
-00005A E020 F2D3 0050 002D3          36          XPRNT NUMLINE2,80        PRINT THE LINE
-000060 47F0 F02C            0002C    37          BC    B'1111',CODE       GO BACK AND READ NEXT CODE
-                                     38 *
-                                     39 ***<STEP 3>    READ IN NUMBER TO WITHDRAWAL AND SUBTRACT FROM BALANCE
+                                     29 ***<STEP 3>     READ IN NUMBER TO DEPOSIT AND ADD TO BALANCE
+                                     30 *
+000046 5391 0000            00000    31 DEP      XDECI 9,0(1)             READ IN NEXT NUMBER
+00004A 5A40 F3D4            003D4    32          A     4,ONE              ADD ONE TO TOTAL
+00004E 1A89                          33          AR    8,9                ADD TO BALANCE
+000050 1AB9                          34          AR    11,9               ADD TO DEPOSIT TOTAL
+000052 5260 F2E3            002E3    35          XDECO 6,NUMLINE2+0       ADD CODE (0 OR 1) TO LINE
+000056 5290 F2F2            002F2    36          XDECO 9,NUMLINE2+15      ADD NUMBER TO DEPOSIT TO LINE
+00005A 5280 F306            00306    37          XDECO 8,NUMLINE2+35      ADD NEW BALANCE TO LINE
+00005E E020 F2E3 0050 002E3          38          XPRNT NUMLINE2,80        PRINT THE LINE
+000064 47F0 F030            00030    39          BC    B'1111',CODE       GO BACK AND READ NEXT CODE
                                      40 *
-000064 5391 0000            00000    41 WITH     XDECI 9,0(1)             READ IN NEXT NUMBER
-000068 5A50 F3C4            003C4    42          A     5,ONE              ADD ONE TO TOTAL
-00006C 1B89                          43          SR    8,9                SUTRACT FROM BALANCE
-00006E 1AC9                          44          AR    12,9               ADD TO WITHDRAWAL TOTAL
-000070 5260 F2D3            002D3    45          XDECO 6,NUMLINE2         ADD CODE(0 OR 1) TO LINE
-000074 5290 F2E2            002E2    46          XDECO 9,NUMLINE2+15      ADD NUMBER TO WITHDRAWAL LINE
-000078 5280 F2F4            002F4    47          XDECO 8,NUMLINE2+33      ADD NEW BALANCE TO LINE
-00007C E020 F2D3 0050 002D3          48          XPRNT NUMLINE2,80        PRINT THE LINE
-000082 47F0 F02C            0002C    49          BC    B'1111',CODE       GO BACK AND READ NEXT CODE
-                                     50 *
-                                     51 ***<STEP 4>    PRINT RESULTS THEN EXIT PROGRAM
+                                     41 ***<STEP 3>    READ IN NUMBER TO WITHDRAWAL AND SUBTRACT FROM BALANCE
+                                     42 *
+000068 5391 0000            00000    43 WITH     XDECI 9,0(1)             READ IN NEXT NUMBER
+00006C 5A50 F3D4            003D4    44          A     5,ONE              ADD ONE TO TOTAL
+000070 1B89                          45          SR    8,9                SUTRACT FROM BALANCE
+000072 1AD9                          46          AR    13,9               ADD TO WITHDRAWAL TOTAL
+000074 5260 F2E3            002E3    47          XDECO 6,NUMLINE2         ADD CODE(0 OR 1) TO LINE
+000078 5290 F2F2            002F2    48          XDECO 9,NUMLINE2+15      ADD NUMBER TO WITHDRAWAL LINE
+00007C 5280 F306            00306    49          XDECO 8,NUMLINE2+35      ADD NEW BALANCE TO LINE
+000080 E020 F2E3 0050 002E3          50          XPRNT NUMLINE2,80        PRINT THE LINE
+000086 47F0 F030            00030    51          BC    B'1111',CODE       GO BACK AND READ NEXT CODE
 
                                                                                                                             PAGE 2
   LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
 
                                      52 *
-000086 5250 F1B7            001B7    53 DONE     XDECO 5,WITHDRAW+33      ADD NUMBER OF WITHDRAWALS
-00008A E020 F196 004F 00196          54          XPRNT WITHDRAW,79        PRINT WITHDRAWALS TOTAL
-000090 5240 F168            00168    55          XDECO 4,DEPOSIT+33       ADD NUMBER OF DEPOSITS
-000094 E020 F147 004F 00147          56          XPRNT DEPOSIT,79         PRINT DEPOSITS TOTAL
-00009A E020 F1E5 004F 001E5          57          XPRNT AVGWITH            PRINT CHECK AVERAGE
-0000A0 E020 F234 004F 00234          58          XPRNT AVGDEP             PRINT DEPOSIT AVERAGE
-0000A6 07FE                          59          BCR   B'1111',14         TERMINATE PROGRAM
-                                     60 *
-                                     61 ***********************************************************************
-                                        *
-0000A8 40404040E3D9C1D5              62 LABEL1   DC    CL80'    TRANSACTION        AMOUNT           BALANCE'
-0000F8 4040404040404040              63 LABEL2   DC    CL79'          CODE       (IN CENTS)        (IN CENTS)'
-000147 4040404040404040              64 DEPOSIT  DC    CL79'           # OF DEPOSITS           ='
-000196 4040404040404040              65 WITHDRAW DC    CL79'           # OF WITHDRAWALS        ='
-0001E5 4040404040404040              66 AVGWITH  DC    CL79'           AVG. AMT. PER CHECK     ='
-000234 4040404040404040              67 AVGDEP   DC    CL79'           AVG. AMT. PER DEPOSIT   ='
-000283 5C40404040404040              68 NUMLINE  DC    CL80'*'
-0002D3 5C40404040404040              69 NUMLINE2 DC    CL80'*'
-000323                               70 CARD     DS    CL79
-000372                               71 CARD2    DS    CL79
-0003C4 00000001                      72 ONE      DC    F'1'
+                                     53 ***<STEP 4>    PRINT RESULTS THEN EXIT PROGRAM
+                                     54 *
+00008A 5250 F1C9            001C9    55 DONE     XDECO 5,WITHDRAW+35      ADD NUMBER OF WITHDRAWALS
+00008E E020 F1A6 004F 001A6          56          XPRNT WITHDRAW,79        PRINT WITHDRAWALS TOTAL
+000094 5240 F17A            0017A    57          XDECO 4,DEPOSIT+35       ADD NUMBER OF DEPOSITS
+000098 E020 F157 004F 00157          58          XPRNT DEPOSIT,79         PRINT DEPOSITS TOTAL
+                                     59 *
+                                     60 ***<CALCULATE AVERAGE AMOUNT PER CHECK>
+                                     61 *
+00009E 1DC5                          62          DR    12,5               DIVIDE FOR AVG PER CHECK
+0000A0 52D0 F218            00218    63          XDECO 13,AVGWITH+35      ADD CHECK AVG
+0000A4 E020 F1F5 004F 001F5          64          XPRNT AVGWITH            PRINT CHECK AVERAGE
+                                     65 *
+                                     66 ***<CALCULATE AVERAGE AMOUNT PER DEPOSIT>
+                                     67 *
+0000AA 1DA4                          68          DR    10,4               DIVIDE FOR AVG PER DEPOSIT
+0000AC 52B0 F267            00267    69          XDECO 11,AVGDEP+35       ADD DEPOSIT AVG
+0000B0 E020 F244 004F 00244          70          XPRNT AVGDEP             PRINT DEPOSIT AVERAGE
+                                     71 *
+0000B6 07FE                          72          BCR   B'1111',14         TERMINATE PROGRAM
                                      73 *
-                                     74          END   PROG3
+                                     74 ***********************************************************************
+                                        *
+0000B8 40404040E3D9C1D5              75 LABEL1   DC    CL80'    TRANSACTION        AMOUNT           BALANCE'
+000108 4040404040404040              76 LABEL2   DC    CL79'          CODE       (IN CENTS)        (IN CENTS)'
+000157 4040404040404040              77 DEPOSIT  DC    CL79'           # OF DEPOSITS         ='
+0001A6 4040404040404040              78 WITHDRAW DC    CL79'           # OF WITHDRAWALS      ='
+0001F5 4040404040404040              79 AVGWITH  DC    CL79'           AVG. AMT. PER CHECK   ='
+000244 4040404040404040              80 AVGDEP   DC    CL79'           AVG. AMT. PER DEPOSIT ='
+000293 5C40404040404040              81 NUMLINE  DC    CL80'*'
+0002E3 5C40404040404040              82 NUMLINE2 DC    CL80'*'
+000333                               83 CARD     DS    CL79
+000382                               84 CARD2    DS    CL79
+0003D4 00000001                      85 ONE      DC    F'1'
+                                     86 *
+                                     87          END   PROG3
 
 ***   0 STATEMENTS FLAGGED - 0 WARNINGS, 0 ERRORS
 
@@ -92,35 +105,35 @@ ANY OUTPUT BEFORE EXECUTION COMPLETE MESSAGE IS PRODUCED BY USER PROGRAM ***
 
    TRANSACTION        AMOUNT           BALANCE                                 
          CODE       (IN CENTS)        (IN CENTS)                              
-                                       23536                                   
-          0           5735             29271                                   
-          1            874             28397                                   
-          0            275             28672                                   
-          1           1081             27591                                   
-          1           6075             21516                                   
-          0           9998             31514                                   
-          1           1274             30240                                   
-          1            770             29470                                   
-          0           5578             35048                                   
-          0           1954             37002                                   
-          1            994             36008                                   
-          0           1574             37582                                   
-          0           5254             42836                                   
-          1            884             41952                                   
-          0             41             41993                                   
-          1           8880             33113                                   
-          1           1990             31123                                   
-          0           1085             32208                                   
-          0           1474             33682                                   
-          0           6660             40342                                   
-          1           8888             31454                                   
-          0           1515             32969                                   
-          0           9768             42737                                   
-          1           4284             38453                                   
-          # OF WITHDRAWALS                11                                  
-          # OF DEPOSITS                   13                                  
-          AVG. AMT. PER CHECK     =                                           
-          AVG. AMT. PER DEPOSIT   =                                           
+                                         23536                                 
+          0           5735               29271                                 
+          1            874               28397                                 
+          0            275               28672                                 
+          1           1081               27591                                 
+          1           6075               21516                                 
+          0           9998               31514                                 
+          1           1274               30240                                 
+          1            770               29470                                 
+          0           5578               35048                                 
+          0           1954               37002                                 
+          1            994               36008                                 
+          0           1574               37582                                 
+          0           5254               42836                                 
+          1            884               41952                                 
+          0             41               41993                                 
+          1           8880               33113                                 
+          1           1990               31123                                 
+          0           1085               32208                                 
+          0           1474               33682                                 
+          0           6660               40342                                 
+          1           8888               31454                                 
+          0           1515               32969                                 
+          0           9768               42737                                 
+          1           4284               38453                                 
+          # OF WITHDRAWALS      =           11                                
+          # OF DEPOSITS         =           13                                
+          AVG. AMT. PER CHECK   =         3272                                
+          AVG. AMT. PER DEPOSIT =         3916                                
 
 *** EXECUTION COMPLETED ***
 
