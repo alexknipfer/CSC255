@@ -1,0 +1,99 @@
+
+ASSIST/I Version 2.03, Copyright 1984, BDM Software.                             
+
+
+                                                                                                                            PAGE 1
+  LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
+
+000000                                1 PROG4    CSECT
+000000                                2          USING PROG4,15
+                                      3 *
+                                      4 ***<STEP 1> PRINT THE HEADERS (LABELS)
+                                      5 *
+000000 E020 F194 0019 00194           6 LABELS   XPRNT =C'          TANK DIMENSIONS'
+000006 E020 F138 0020 00138           7          XPRNT =C'+                       CAPACITY'
+00000C E020 F180 0014 00180           8          XPRNT =C'           (IN FEET)'
+000012 E020 F1AD 0027 001AD           9          XPRNT =C'+                          (IN GALLONS)'
+000018 E020 F158 0028 00158          10          XPRNT =C'        LENGTH         WIDTH       DEPTH'
+00001E E020 F1D4 001F 001D4          11          XPRNT =C'+       VOLUME       80% FILLED'
+                                     12 *
+                                     13 ***<STEP 2> INITIALIZE REGISTERS
+                                     14 *
+000024 1B22                          15 RST      SR    2,2                EVEN FOR MULITPLY
+000026 1B99                          16          SR    9,9                HOLDS VOLUME
+000028 1BCC                          17          SR    12,12              EVEN FOR DIVIDE
+00002A 1BDD                          18          SR    13,13              HOLDS PERCENT FILLED
+00002C 47F0 F030            00030    19          BC    B'1111',NUMS       GO READ IN NUMBERS
+                                     20 *
+                                     21 ***<STEP 3> READ IN NUMBERS
+                                     22 *
+000030 E000 F086 004F 00086          23 NUMS     XREAD CARD,79            READ IN NUMBER
+000036 4740 F084            00084    24          BC    B'0100',DONE       BRANCH TO DONE IF EOF
+00003A 5330 F086            00086    25          XDECI 3,CARD             CONVERT TO NUMBER
+00003E 5351 0000            00000    26          XDECI 5,0(1)             READ NEXT NUMBER
+000042 5371 0000            00000    27          XDECI 7,0(1)             READ NEXT NUMBER
+000046 5230 F0D5            000D5    28          XDECO 3,NUMLINE          ADD 1ST NUMBER TO LINE
+00004A 5250 F0E4            000E4    29          XDECO 5,NUMLINE+15       ADD 2ND NUMBER TO LINE
+00004E 5270 F0F0            000F0    30          XDECO 7,NUMLINE+27       ADD 3RD NUMBER TO LINE
+000052 47F0 F056            00056    31          BC    B'1111',VOLUME     GO CALCULATE VOLUME
+                                     32 *
+                                     33 ***<STEP 4> CALCULATE THE VOLUME
+                                     34 *
+000056 1C25                          35 VOLUME   MR    2,5                MULTIPLY FIRST TWO
+000058 1C27                          36          MR    2,7                MULTIPLY LAST TWO
+                                     37 *** NOTE: MULTIPLYING THESE IS SIMLIAR TO MULITPLYING ALL 3
+                                     38 ***       FOR FINAL VOLUME
+00005A 1A93                          39          AR    9,3                TOTAL (FINAL) VOLUME
+00005C 5C80 F128            00128    40          M     8,GAL              MULTIPLY TO GET GALLONS
+000060 5D80 F12C            0012C    41          D     8,HUN              DIVIDE TO GET GALLONS
+000064 5290 F0FD            000FD    42          XDECO 9,NUMLINE+40       ADD VOLUME TO LINE
+000068 47F0 F06C            0006C    43          BC    B'1111',FILLED     GO CALCULATE 80% FILLED
+                                     44 *
+                                     45 ***<STEP 5> CALCULATE 80% FILLED
+                                     46 *
+00006C 5C80 F130            00130    47 FILLED   M     8,EGTY             MULTIPLY VOLUME BY 80
+000070 1AD9                          48          AR    13,9               ADD TO TRACK 80% FILLED
+000072 5DC0 F12C            0012C    49          D     12,HUN             DIVIDE BY 100 FOR %
+000076 52D0 F10A            0010A    50          XDECO 13,NUMLINE+53      ADD 80% FILLED TO LINE
+00007A E020 F0D5 0050 000D5          51          XPRNT NUMLINE,80         PRINT THE NUMBERS
+
+                                                                                                                            PAGE 2
+  LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
+
+000080 47F0 F024            00024    52          BC    B'1111',RST        GO RESET NUMBERS
+                                     53 *
+                                     54 ***<STEP 6> TERMINATE PROGRAM
+                                     55 *
+000084 07FE                          56 DONE     BCR   B'1111',14         TERMINATE PROGRAM
+                                     57 *
+                                     58 ********************************************************
+                                     59 *
+000086                               60 CARD     DS    CL79
+0000D5 5C40404040404040              61 NUMLINE  DC    CL80'*'
+000128 000002EC                      62 GAL      DC    F'748'
+00012C 00000064                      63 HUN      DC    F'100'
+000130 00000050                      64 EGTY     DC    F'80'
+                                     65          END PROG4
+000138 4E40404040404040                          =C'+                       CAPACITY'
+000158 4040404040404040                          =C'        LENGTH         WIDTH       DEPTH'
+000180 4040404040404040                          =C'           (IN FEET)'
+000194 4040404040404040                          =C'          TANK DIMENSIONS'
+0001AD 4E40404040404040                          =C'+                          (IN GALLONS)'
+0001D4 4E40404040404040                          =C'+       VOLUME       80% FILLED'
+
+***   0 STATEMENTS FLAGGED - 0 WARNINGS, 0 ERRORS
+
+*** PROGRAM EXECUTION BEGINNING -
+ANY OUTPUT BEFORE EXECUTION COMPLETE MESSAGE IS PRODUCED BY USER PROGRAM ***
+
+         TANK DIMENSIONS                       CAPACITY
+          (IN FEET)                          (IN GALLONS)
+       LENGTH         WIDTH       DEPTH       VOLUME       80% FILLED
+         20             60           6        53856        43084               
+         15             25           4        11220         8976               
+         40             40           8        95744        76595               
+         31             32           7        51941        41552               
+         30             33           5        37026        29620               
+
+*** EXECUTION COMPLETED ***
+
