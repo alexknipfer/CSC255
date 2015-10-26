@@ -89,11 +89,16 @@ ANY OUTPUT BEFORE EXECUTION COMPLETE MESSAGE IS PRODUCED BY USER PROGRAM ***
          TANK DIMENSIONS                       CAPACITY
           (IN FEET)                          (IN GALLONS)
        LENGTH         WIDTH       DEPTH       VOLUME       80% FILLED
-         20             60           6        53856        43084               
-         15             25           4        11220         8976               
-         40             40           8        95744        76595               
-         31             32           7        51941        41552               
-         30             33           5        37026        29620               
+         42             21           5        32986        26388               
+         10             12           4         3590         2872               
+         30             30           9        60588        48470               
+         55             25           8        82280        65824               
+         25             50           7        65450        52360               
+         40             30          10        89760        71808               
+         35             25           5        32725        26180               
+         18             24           6        19388        15510               
+          4              5           2          299          239               
+         15             15           8        13464        10771               
 
 *** EXECUTION COMPLETED ***
 
