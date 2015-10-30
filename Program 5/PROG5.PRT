@@ -1,0 +1,53 @@
+
+ASSIST/I Version 2.03, Copyright 1984, BDM Software.                             
+
+
+                                                                                                                            PAGE 1
+  LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
+
+000000                                1 PROG5    CSECT
+000000                                2          USING PROG5,15
+000000 1B44                           3          SR    4,4
+000002 4130 F038            00038     4          LA    3,TABLE
+                                      5 *
+000006 E020 F178 0012 00178           6          XPRNT =C'      TABLE VALUES'
+                                      7 *
+00000C E000 F0D8 0050 000D8           8 READ     XREAD CARD,80
+000012 4740 F034            00034     9          BC    B'0100',DONE       BRANCH TO DONE IF EOF
+000016 5320 F0D8            000D8    10          XDECI 2,CARD
+00001A 5220 F128            00128    11          XDECO 2,NUMLINE
+00001E E020 F128 0050 00128          12          XPRNT NUMLINE,80
+000024 5023 0000            00000    13          ST    2,0(3)
+000028 4144 0001            00001    14          LA    4,1(4)
+00002C 4133 0004            00004    15          LA    3,4(3)
+000030 47F0 F00C            0000C    16          BC    B'1111',READ
+                                     17 *
+000034 07FE                          18 DONE     BCR   B'1111',14         TERMINATE PROGRAM
+                                     19 *
+                                     20 *****************************************************
+                                     21 *
+000038                               22 TABLE    DS    40F
+0000D8                               23 CARD     DS    CL80               CARD INPUT AREA
+000128 5C40404040404040              24 NUMLINE  DC    CL80'*'
+                                     25 *
+                                     26          END   PROG5
+000178 404040404040E3C1                          =C'      TABLE VALUES'
+
+***   0 STATEMENTS FLAGGED - 0 WARNINGS, 0 ERRORS
+
+*** PROGRAM EXECUTION BEGINNING -
+ANY OUTPUT BEFORE EXECUTION COMPLETE MESSAGE IS PRODUCED BY USER PROGRAM ***
+
+     TABLE VALUES
+         20                                                                    
+         30                                                                    
+         60                                                                    
+         80                                                                    
+         90                                                                    
+         50                                                                    
+         40                                                                    
+         10                                                                    
+         70                                                                    
+
+*** EXECUTION COMPLETED ***
+

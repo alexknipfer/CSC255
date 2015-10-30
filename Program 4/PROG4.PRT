@@ -1,5 +1,20 @@
 
-ASSIST/I Version 2.03, Copyright 1984, BDM Software.                             
+ASSIST/I Version 2.03, Copyright 1984, BDM Software.     
+
+************************************************************************
+*   FILE NAME: PROG4.PRT                       ASSIGNMENT#:  4         *
+*				                  	                  *
+*   AUTHOR __________________________________________	          *
+*	           ALEX KNIPFER		                          *
+*					                                 *
+*   COURSE: CSC25500    SECTION: 11      DUE DATE: 10/30/2015          *
+*			                                                *
+*   PURPOSE: THIS PROGRAM CALCULATES THE CAPACITY OF A SERIES OF WATER *
+*            TANKS AND THE AMOUNT OF WATER  REQUIRED TO FILL EACH TANK *
+*            TO 80 PERCENT OF ITS CAPACITY. THE DATA READ IN INCLUDES  *
+*            EACH TANK’S LENGTH, WIDTH, AND HEIGHT. THE PROGRAM THEN   *
+*            CALCULATES EACH TANK’S VOLUME AND 80 PERCENT FILLED.      *
+************************************************************************                            
 
 
                                                                                                                             PAGE 1
