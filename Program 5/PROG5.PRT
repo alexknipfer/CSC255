@@ -8,125 +8,156 @@ ASSIST/I Version 2.03, Copyright 1984, BDM Software.
 000000                                1 PROG5    CSECT
 000000                                2          USING PROG5,15
 000000 1B44                           3          SR    4,4                SET COUNT OF ENTRIES
-000002 4130 F114            00114     4          LA    3,TABLE
-000006 4180 F1B4            001B4     5          LA    8,LGTABLE
-00000A 1B77                           6          SR    7,7                SUM OF VALUES
-00000C 1B66                           7          SR    6,6
-00000E 1B99                           8          SR    9,9
-000010 1BBB                           9          SR    11,11              VALUES EQUAL TO AVERAGE
-                                     10 *
-000012 E020 F620 0012 00620          11          XPRNT =C'      TABLE VALUES'
+000002 4130 F180            00180     4          LA    3,TABLE
+000006 4180 F220            00220     5          LA    8,LGTABLE
+00000A 41D0 F2C0            002C0     6          LA    13,SMTABLE
+00000E 1B77                           7          SR    7,7                SUM OF VALUES
+000010 1B66                           8          SR    6,6
+000012 1B99                           9          SR    9,9
+000014 1BCC                          10          SR    12,12
+000016 1BBB                          11          SR    11,11              VALUES EQUAL TO AVERAGE
                                      12 *
-000018 E000 F254 0050 00254          13 READ     XREAD CARD,80
-                                     14 *        XDECO 3,LARGEVAL
-                                     15 *        XPRNT LARGEVAL,80
-00001E 4740 F042            00042    16          BC    B'0100',SUM        BRANCH TO DONE IF EOF
-000022 5320 F254            00254    17          XDECI 2,CARD
-000026 5220 F2A4            002A4    18          XDECO 2,NUMLINE
-00002A E020 F2A4 0050 002A4          19          XPRNT NUMLINE,80
-000030 1A72                          20          AR    7,2
-000032 5023 0000            00000    21          ST    2,0(3)
-000036 4144 0001            00001    22          LA    4,1(4)
-00003A 4133 0004            00004    23          LA    3,4(3)
-00003E 47F0 F018            00018    24          BC    B'1111',READ
+000018 E020 F868 0012 00868          13          XPRNT =C'      TABLE VALUES'
+                                     14 *
+00001E E000 F360 0050 00360          15 READ     XREAD CARD,80
+000024 4740 F048            00048    16          BC    B'0100',SUM        BRANCH TO DONE IF EOF
+000028 5320 F360            00360    17          XDECI 2,CARD
+00002C 5220 F3B0            003B0    18          XDECO 2,NUMLINE
+000030 E020 F3B0 0050 003B0          19          XPRNT NUMLINE,80
+000036 1A72                          20          AR    7,2
+000038 5023 0000            00000    21          ST    2,0(3)
+00003C 4144 0001            00001    22          LA    4,1(4)
+000040 4133 0004            00004    23          LA    3,4(3)
+000044 47F0 F01E            0001E    24          BC    B'1111',READ
                                      25 *
-000042 5270 F402            00402    26 SUM      XDECO 7,SUMLINE+30
-000046 E020 F5C4 0050 005C4          27          XPRNT BLANK,80
-00004C E020 F3E4 0050 003E4          28          XPRNT SUMLINE,80
+000048 5270 F55E            0055E    26 SUM      XDECO 7,SUMLINE+30
+00004C E020 F810 0050 00810          27          XPRNT BLANK,80
+000052 E020 F540 0050 00540          28          XPRNT SUMLINE,80
                                      29 *
-000052 1D64                          30 AVG      DR    6,4
-000054 5270 F3B2            003B2    31          XDECO 7,AVERAGE+30
-000058 E020 F5C4 0050 005C4          32          XPRNT BLANK,80
-00005E E020 F394 0050 00394          33          XPRNT AVERAGE,80
-000064 E020 F5C4 0050 005C4          34          XPRNT BLANK,80
+000058 1D64                          30 AVG      DR    6,4
+00005A 5270 F50E            0050E    31          XDECO 7,AVERAGE+30
+00005E E020 F810 0050 00810          32          XPRNT BLANK,80
+000064 E020 F4F0 0050 004F0          33          XPRNT AVERAGE,80
+00006A E020 F810 0050 00810          34          XPRNT BLANK,80
                                      35 *        BC    B'1111',DONE
                                      36 *****
-00006A 5860 F114            00114    37          L     6,TABLE
-00006E 4150 F114            00114    38          LA    5,TABLE
-000072 1B22                          39          SR    2,2
-000074 1967                          40 LOOP     CR    6,7
-000076 4720 F090            00090    41          BC    B'0010',LARGER
-00007A 4780 F0B2            000B2    42          BC    B'1000',EQUAL
-00007E 5A50 F614            00614    43 CONT     A     5,FOUR
-000082 5865 0000            00000    44          L     6,0(5)
-000086 1953                          45          CR    5,3
-000088 4780 F0BA            000BA    46          BC    B'1000',PLARGE
-00008C 47F0 F074            00074    47          BC    B'1111',LOOP
-                                     48 *
-000090 5A20 F618            00618    49 LARGER   A     2,ONE
-000094 5068 0000            00000    50          ST    6,0(8)
-000098 4199 0001            00001    51          LA    9,1(9)
+000070 5860 F180            00180    37          L     6,TABLE
+000074 4150 F180            00180    38          LA    5,TABLE
+000078 1B22                          39          SR    2,2
+00007A 1B44                          40          SR    4,4
+                                     41 *        XDECO 3,LARGEVAL
+                                     42 *        XPRNT LARGEVAL,80
+00007C 1953                          43 LOOP     CR    5,3
+00007E 4780 F0E2            000E2    44          BC    B'1000',PLARGE
+000082 1967                          45          CR    6,7
+000084 4720 F0A2            000A2    46          BC    B'0010',LARGER
+000088 4740 F0BC            000BC    47          BC    B'0100',LESS
+00008C 4780 F0DA            000DA    48          BC    B'1000',EQUAL
+000090 5A50 F860            00860    49 CONT     A     5,FOUR
+000094 5865 0000            00000    50          L     6,0(5)
+000098 1953                          51          CR    5,3
 
                                                                                                                             PAGE 2
   LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
 
-00009C 4188 0004            00004    52          LA    8,4(8)
-0000A0 5A50 F614            00614    53          A     5,FOUR
-0000A4 5865 0000            00000    54          L     6,0(5)
-0000A8 1953                          55          CR    5,3
-0000AA 4780 F0BA            000BA    56          BC    B'1000',PLARGE
-0000AE 47F0 F074            00074    57          BC    B'1111',LOOP
-                                     58 *
-0000B2 5AB0 F618            00618    59 EQUAL    A     11,ONE
-0000B6 47F0 F07E            0007E    60          BC    B'1111',CONT
-                                     61 *
-                                     62 *        XDECO 6,LARGEVAL
-                                     63 *        XPRNT LARGEVAL,80
-                                     64 *        A     5,FOUR
-                                     65 *        L     6,0(5)
-                                     66 *        CR    5,3
-                                     67 *        BC    B'1000',DONE
-                                     68 *        BC    B'1111',LOOP
-                                     69 *
-0000BA E020 F434 0050 00434          70 PLARGE   XPRNT LGAVG,80
-0000C0 5220 F4A2            004A2    71          XDECO 2,LGAVG2+30
-0000C4 E020 F484 0050 00484          72          XPRNT LGAVG2,80
-0000CA 47F0 F0CE            000CE    73          BC    B'1111',PTABLE2
+00009A 4780 F0E2            000E2    52          BC    B'1000',PLARGE
+00009E 47F0 F07C            0007C    53          BC    B'1111',LOOP
+                                     54 *
+0000A2 5A20 F864            00864    55 LARGER   A     2,ONE
+0000A6 5068 0000            00000    56          ST    6,0(8)
+                                     57 *        LA    9,1(9)
+0000AA 4188 0004            00004    58          LA    8,4(8)
+0000AE 5A50 F860            00860    59          A     5,FOUR
+0000B2 5865 0000            00000    60          L     6,0(5)
+0000B6 1953                          61          CR    5,3
+                                     62 *        BC    B'1000',PLARGE
+0000B8 47F0 F07C            0007C    63          BC    B'1111',LOOP
+                                     64 *
+0000BC 5A40 F864            00864    65 LESS     A     4,ONE
+0000C0 506D 0000            00000    66          ST    6,0(13)
+0000C4 41CC 0001            00001    67          LA    12,1(12)
+0000C8 41DD 0004            00004    68          LA    13,4(13)
+0000CC 5A50 F860            00860    69          A     5,FOUR
+0000D0 5865 0000            00000    70          L     6,0(5)
+0000D4 1953                          71          CR    5,3
+                                     72 *        BC    B'1000',PSMALL
+0000D6 47F0 F07C            0007C    73          BC    B'1111',LOOP
                                      74 *
-0000CE 5890 F1B4            001B4    75 PTABLE2  L     9,LGTABLE
-0000D2 41A0 F1B4            001B4    76          LA    10,LGTABLE
-0000D6 E020 F4D4 0050 004D4          77          XPRNT LGAVG3,80
-0000DC 5290 F344            00344    78 PLOOP    XDECO 9,LARGEAVG
-0000E0 E020 F344 0050 00344          79          XPRNT LARGEAVG,80
-0000E6 5AA0 F614            00614    80          A     10,FOUR
-0000EA 589A 0000            00000    81          L     9,0(10)
-0000EE 19A8                          82          CR    10,8
-0000F0 4780 F0F8            000F8    83          BC    B'1000',PEQUAL
-0000F4 47F0 F0DC            000DC    84          BC    B'1111',PLOOP
-                                     85 *
-0000F8 E020 F5C4 0050 005C4          86 PEQUAL   XPRNT BLANK,80
-0000FE E020 F524 0050 00524          87          XPRNT EQLAVG,80
-000104 52B0 F592            00592    88          XDECO 11,EQLAVG2+30
-000108 E020 F574 0050 00574          89          XPRNT EQLAVG2,80
-00010E 47F0 F112            00112    90          BC    B'1111',DONE
-                                     91 *
-000112 07FE                          92 DONE     BCR   B'1111',14         TERMINATE PROGRAM
+0000DA 5AB0 F864            00864    75 EQUAL    A     11,ONE
+0000DE 47F0 F090            00090    76          BC    B'1111',CONT
+                                     77 *
+0000E2 E020 F590 0050 00590          78 PLARGE   XPRNT LGAVG,80
+0000E8 5220 F5FE            005FE    79          XDECO 2,LGAVG2+30
+0000EC E020 F5E0 0050 005E0          80          XPRNT LGAVG2,80
+0000F2 47F0 F0F6            000F6    81          BC    B'1111',PTABLE2
+                                     82 *
+0000F6 5890 F220            00220    83 PTABLE2  L     9,LGTABLE
+0000FA 41A0 F220            00220    84          LA    10,LGTABLE
+0000FE E020 F630 0050 00630          85          XPRNT LGAVG3,80
+000104 5290 F450            00450    86 PLOOP    XDECO 9,LARGEAVG
+000108 E020 F450 0050 00450          87          XPRNT LARGEAVG,80
+00010E 5AA0 F860            00860    88          A     10,FOUR
+000112 589A 0000            00000    89          L     9,0(10)
+000116 19A8                          90          CR    10,8
+000118 4780 F120            00120    91          BC    B'1000',PEQUAL
+00011C 47F0 F104            00104    92          BC    B'1111',PLOOP
                                      93 *
-                                     94 *****************************************************
-                                     95 *
-000114                               96 TABLE    DS    40F
-0001B4                               97 LGTABLE  DS    40F
-000254                               98 CARD     DS    CL80               CARD INPUT AREA
-0002A4 5C40404040404040              99 NUMLINE  DC    CL80'*'
-0002F4 5C40404040404040             100 LARGEVAL DC    CL80'*'
-000344 5C40404040404040             101 LARGEAVG DC    CL80'*'
-000394 40E3C8C540C1E5C5             102 AVERAGE  DC    CL80' THE AVERAGE OF THE VALUES IS:'
-0003E4 40E3C8C540E2E4D4             103 SUMLINE  DC    CL80' THE SUM OF THE VALUES IS:'
-000434 40E3C8C540D5E4D4             104 LGAVG    DC    CL80' THE NUMBER OF VALUES GREATER THAN'
+000120 E020 F810 0050 00810          94 PEQUAL   XPRNT BLANK,80
+000126 E020 F680 0050 00680          95          XPRNT EQLAVG,80
+00012C 52B0 F6EE            006EE    96          XDECO 11,EQLAVG2+30
+000130 E020 F6D0 0050 006D0          97          XPRNT EQLAVG2,80
+000136 E020 F810 0050 00810          98          XPRNT BLANK,80
+00013C 47F0 F140            00140    99          BC    B'1111',PLESS
+                                    100 *
+000140 E020 F720 0050 00720         101 PLESS    XPRNT SMAVG,80
+000146 5240 F78E            0078E   102          XDECO 4,SMAVG2+30
+00014A E020 F770 0050 00770         103          XPRNT SMAVG2,80
+000150 47F0 F154            00154   104          BC    B'1111',PTABLE3
 
                                                                                                                             PAGE 3
   LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
 
-000484 40E3C8C540C1E5C5             105 LGAVG2   DC    CL80' THE AVERAGE IS:'
-0004D4 40E3C8C5E840C1D9             106 LGAVG3   DC    CL80' THEY ARE:'
-000524 40E3C8C540D5E4D4             107 EQLAVG   DC    CL80' THE NUMBER OF VALUES EQUAL TO'
-000574 40E3C8C540C1E5C5             108 EQLAVG2  DC    CL80' THE AVERAGE IS:'
-0005C4 5C40404040404040             109 BLANK    DC    CL80'*'
-000614 00000004                     110 FOUR     DC    F'4'
-000618 00000001                     111 ONE      DC    F'1'
-                                    112 *
-                                    113          END   PROG5
-000620 404040404040E3C1                          =C'      TABLE VALUES'
+                                    105 *
+000154 5890 F2C0            002C0   106 PTABLE3  L     9,SMTABLE
+000158 41A0 F2C0            002C0   107          LA    10,SMTABLE
+                                    108 *        XDECO 6,LARGEVAL
+                                    109 *        XPRNT LARGEVAL,80
+00015C E020 F7C0 0050 007C0         110          XPRNT SMAVG3,80
+000162 5290 F4A0            004A0   111 PLOOP2   XDECO 9,SMALLAVG
+000166 E020 F4A0 0050 004A0         112          XPRNT SMALLAVG,80
+00016C 5AA0 F860            00860   113          A     10,FOUR
+000170 589A 0000            00000   114          L     9,0(10)
+000174 19AD                         115          CR    10,13
+000176 4780 F17E            0017E   116          BC    B'1000',DONE
+00017A 47F0 F162            00162   117          BC    B'1111',PLOOP2
+00017E 07FE                         118 DONE     BCR   B'1111',14         TERMINATE PROGRAM
+                                    119 *
+                                    120 *****************************************************
+                                    121 *
+000180                              122 TABLE    DS    40F
+000220                              123 LGTABLE  DS    40F
+0002C0                              124 SMTABLE  DS    40F
+000360                              125 CARD     DS    CL80               CARD INPUT AREA
+0003B0 5C40404040404040             126 NUMLINE  DC    CL80'*'
+000400 5C40404040404040             127 LARGEVAL DC    CL80'*'
+000450 5C40404040404040             128 LARGEAVG DC    CL80'*'
+0004A0 5C40404040404040             129 SMALLAVG DC    CL80'*'
+0004F0 40E3C8C540C1E5C5             130 AVERAGE  DC    CL80' THE AVERAGE OF THE VALUES IS:'
+000540 40E3C8C540E2E4D4             131 SUMLINE  DC    CL80' THE SUM OF THE VALUES IS:'
+000590 40E3C8C540D5E4D4             132 LGAVG    DC    CL80' THE NUMBER OF VALUES GREATER THAN'
+0005E0 40E3C8C540C1E5C5             133 LGAVG2   DC    CL80' THE AVERAGE IS:'
+000630 40E3C8C5E840C1D9             134 LGAVG3   DC    CL80' THEY ARE:'
+000680 40E3C8C540D5E4D4             135 EQLAVG   DC    CL80' THE NUMBER OF VALUES EQUAL TO'
+0006D0 40E3C8C540C1E5C5             136 EQLAVG2  DC    CL80' THE AVERAGE IS:'
+000720 40E3C8C540D5E4D4             137 SMAVG    DC    CL80' THE NUMBER OF VALUES LESS THAN'
+000770 40E3C8C540C1E5C5             138 SMAVG2   DC    CL80' THE AVERAGE IS:'
+0007C0 40E3C8C5E840C1D9             139 SMAVG3   DC    CL80' THEY ARE:'
+000810 5C40404040404040             140 BLANK    DC    CL80'*'
+000860 00000004                     141 FOUR     DC    F'4'
+000864 00000001                     142 ONE      DC    F'1'
+                                    143 *
+                                    144          END   PROG5
+000868 404040404040E3C1                          =C'      TABLE VALUES'
 
 ***   0 STATEMENTS FLAGGED - 0 WARNINGS, 0 ERRORS
 
@@ -134,30 +165,76 @@ ASSIST/I Version 2.03, Copyright 1984, BDM Software.
 ANY OUTPUT BEFORE EXECUTION COMPLETE MESSAGE IS PRODUCED BY USER PROGRAM ***
 
      TABLE VALUES
-         20                                                                    
-         30                                                                    
-         60                                                                    
-         80                                                                    
+        123                                                                    
+        234                                                                    
+         45                                                                    
+         65                                                                    
+         24                                                                    
          90                                                                    
-         50                                                                    
-         40                                                                    
-         10                                                                    
-         70                                                                    
+        143                                                                    
+         66                                                                    
+         72                                                                    
+         95                                                                    
+         95                                                                    
+         93                                                                    
+         90                                                                    
+         75                                                                    
+        115                                                                    
+         95                                                                    
+        345                                                                    
+         55                                                                    
+         61                                                                    
+         42                                                                    
+         33                                                                    
+         88                                                                    
+         95                                                                    
+         90                                                                    
+         80                                                                    
+         76                                                                    
+         80                                                                    
+        111                                                                    
+         79                                                                    
+         95                                                                    
                                                                                
-THE SUM OF THE VALUES IS:             450                                      
+THE SUM OF THE VALUES IS:            2850                                      
                                                                                
-THE AVERAGE OF THE VALUES IS:          50                                      
+THE AVERAGE OF THE VALUES IS:          95                                      
                                                                                
 THE NUMBER OF VALUES GREATER THAN                                              
-THE AVERAGE IS:                         4                                      
+THE AVERAGE IS:                         6                                      
 THEY ARE:                                                                      
-         60                                                                    
-         80                                                                    
-         90                                                                    
-         70                                                                    
+        123                                                                    
+        234                                                                    
+        143                                                                    
+        115                                                                    
+        345                                                                    
+        111                                                                    
                                                                                
 THE NUMBER OF VALUES EQUAL TO                                                  
-THE AVERAGE IS:                         1                                      
+THE AVERAGE IS:                         5                                      
+                                                                               
+THE NUMBER OF VALUES LESS THAN                                                 
+THE AVERAGE IS:                        19                                      
+THEY ARE:                                                                      
+         45                                                                    
+         65                                                                    
+         24                                                                    
+         90                                                                    
+         66                                                                    
+         72                                                                    
+         93                                                                    
+         90                                                                    
+         75                                                                    
+         55                                                                    
+         61                                                                    
+         42                                                                    
+         33                                                                    
+         88                                                                    
+         90                                                                    
+         80                                                                    
+         76                                                                    
+         80                                                                    
+         79                                                                    
 
 *** EXECUTION COMPLETED ***
 
