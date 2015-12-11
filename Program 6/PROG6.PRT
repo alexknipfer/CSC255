@@ -1,0 +1,292 @@
+
+ASSIST/I Version 2.03, Copyright 1984, BDM Software.                             
+
+*****************************************************************************
+*   FILE NAME: PROG6.PRT                         ASSIGNMENT#: 6             *
+*                                                                           *
+*   AUTHOR __________________________________________________               *
+*                                                                           *
+*   COURSE: CSC25500       SECTION: 11           DUE DATE: 12/8/2015        *
+*                                                                           *
+*   PURPOSE: THIS PROGRAM READS TO GROUPS OF DATA AND STORES EACH SET OF    *
+*   NUMBERS IN THEIR OWN TABLE. IT THEN COMPARES EACH SET OF VALUES AND     *
+*   FINDS THE DUPLICATES AND STORES THEM IN THEIR OWN TABLE. AT THE END     *
+*   EACH OF THE THREE TABLES WILL BE PRINTED.                               *
+*****************************************************************************
+                                                                                                                            PAGE 1
+  LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
+
+000000                                1 R0       EQU   0
+000001                                2 R1       EQU   1
+000002                                3 R2       EQU   2
+000003                                4 R3       EQU   3
+000004                                5 R4       EQU   4
+000005                                6 R5       EQU   5
+000006                                7 R6       EQU   6
+000007                                8 R7       EQU   7
+000008                                9 R8       EQU   8
+000009                               10 R9       EQU   9
+00000A                               11 R10      EQU   10
+00000B                               12 R11      EQU   11
+00000C                               13 R12      EQU   12
+00000D                               14 R13      EQU   13
+00000E                               15 R14      EQU   14
+00000F                               16 R15      EQU   15
+000000                               17 PROG6    CSECT
+000000                               18          USING PROG6,R15
+                                     19 *
+000000 90EC D00C            0000C    20          STM   R14,R12,12(R13)    STORE REGISTERS IN MEMORY
+000004 45EF 0050            00050    21          BAL   R14,80(R15)        PARTITION TO SUBROUTINES
+000008                               22          DS    18F
+000050 50DE 0004            00004    23          ST    R13,4(R14)
+000054 50ED 0008            00008    24          ST    R14,8(R13)
+000058 18DE                          25          LR    R13,R14
+                                     26 *
+                                     27 *
+                                     28 *** BUILD TABLE #1
+                                     29 *
+00005A 4120 F108            00108    30          LA    R2,TABLE1          GET ADDRESS OF TABLE1
+00005E 45E0 F234            00234    31          BAL   R14,BUILDTAB       BRANCH TO BUILD TABLE ROUTINE
+000062 5030 F100            00100    32          ST    R3,ENDTAB1         STORE LAST TABLE ENTRY ADDRESS
+                                     33 *
+                                     34 *** PRINT TABLE #1
+                                     35 *
+000066 E020 F0B8 0015 000B8          36          XPRNT =C'0    TABLE ONE VALUES'
+00006C 45E0 F304            00304    37          BAL   R14,PRINTTAB       BRANCH TO PRINT TABLE ROUTINE
+                                     38 *
+                                     39 *** BUILD TABLE #2
+                                     40 *
+000070 4120 F16C            0016C    41          LA    R2,TABLE2          GET ADDRESS OF TABLE2
+000074 45E0 F234            00234    42          BAL   R14,BUILDTAB       BRANCH TO BUILD TABLE
+000078 5030 F104            00104    43          ST    R3,ENDTAB2         STORE LAST TABLE ENTRY ADDRESS
+                                     44 *
+                                     45 *** PRINT TABLE #2
+                                     46 *
+00007C E020 F0CD 0015 000CD          47          XPRNT =C'0    TABLE TWO VALUES'
+000082 45E0 F304            00304    48          BAL   R14,PRINTTAB
+                                     49 *
+                                     50 *** FIND DUPLICATES
+                                     51 *
+
+                                                                                                                            PAGE 2
+  LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
+
+000086 4120 F108            00108    52          LA    R2,TABLE1          GET ADDRESS OF TABLE1
+00008A 4130 F16C            0016C    53          LA    R3,TABLE2          GET ADDRESS OF TABLE2
+00008E 4140 F1D0            001D0    54          LA    R4,TABLE3          GET ADDRESS OF TABLE3
+000092 5850 F100            00100    55          L     R5,ENDTAB1         GET VALUE OF LAST ENTRY
+000096 5860 F104            00104    56          L     R6,ENDTAB2         GET VALUE OF LAST ENTRY
+00009A 45E0 F380            00380    57          BAL   R14,FINDDUP        BRANCH TO DUPLICATE ROUTINE
+                                     58 *
+                                     59 *** PRINT NEW TABLE
+                                     60 *
+00009E E020 F0E2 001B 000E2          61          XPRNT =C'0    DUPLICATE TABLE VALUES'
+0000A4 4120 F1D0            001D0    62          LA    R2,TABLE3          GET ADDRESS OF TABLE2
+0000A8 1837                          63          LR    R3,R7              GET LAST ADDRESS OF NEW TABLE
+0000AA 45E0 F304            00304    64          BAL   R14,PRINTTAB       BRANCH TO PRINT TABLE
+                                     65 *
+                                     66 *** EXIT TO THE SYSTEM
+0000AE 58DD 0004            00004    67          L     R13,4(R13)
+0000B2 98EC D00C            0000C    68          LM    R14,R12,12(R13)    RESTORE REGISTERS
+0000B6 07FE                          69          BR    R14                BRANCH BACK TO SYSTEM
+                                     70 *
+                                     71          LTORG
+0000B8 F040404040E3C1C2                          =C'0    TABLE ONE VALUES'
+0000CD F040404040E3C1C2                          =C'0    TABLE TWO VALUES'
+0000E2 F040404040C4E4D7                          =C'0    DUPLICATE TABLE VALUES'
+                                     72 *
+                                     73 ***** STORAGE AREA
+                                     74 *
+000100                               75 ENDTAB1  DS    F                  END OF TABLE1
+000104                               76 ENDTAB2  DS    F                  END OF TABLE2
+000108                               77 TABLE1   DS    25F                TABLE 1
+00016C                               78 TABLE2   DS    25F                TABLE 2
+0001D0                               79 TABLE3   DS    25F                TABLE 3
+                                     80 *
+                                     81 ******************************************************
+                                     82 *           TITLE 'BUILDTAB ROUTINE'                 *
+                                     83 ******************************************************
+000234                               84 BUILDTAB DS    0H
+000234 9042 F2C8            002C8    85          STM   R4,R2,READSAVE     USE REGISTERS IN READSAVE
+                                     86 *
+                                     87 *
+                                     88 ****** GET NUMBER ****
+                                     89 *
+000238 E000 F278 0050 00278          90          XREAD CARD,80            READ IN VALUE
+00023E 5340 F278            00278    91          XDECI R4,CARD            CONVERT TO NUMBER
+                                     92 *
+                                     93 **** LAST? **
+                                     94 *
+000242 5940 F270            00270    95 READLOOP C     R4,=F'0'           SEE IF IT'S 0
+000246 4780 F260            00260    96          BE    SETLAST            BRANCH IF IT'S 0
+                                     97 *
+                                     98 **** PUT NUMBER IN TABLE ****
+00024A 5042 0000            00000    99          ST    R4,0(R2)           PUT NUMBER INTO TABLE
+00024E 4122 0004            00004   100          LA    R2,4(R2)           POINT TO NEXT ENTRY
+                                    101 *
+
+                                                                                                                            PAGE 3
+  LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
+
+                                    102 ***** GET NEXT NUMBER *****
+000252 E000 F278 0050 00278         103          XREAD CARD,80            READ IN VALUE
+000258 5340 F278            00278   104          XDECI R4,CARD            CONVERT TO NUMBER
+00025C 47F0 F242            00242   105          B     READLOOP           GO ADD VALUE AGAIN
+                                    106 *
+                                    107 ****** SET POINTER TO END OF TABLE ***
+                                    108 *
+000260 1832                         109 SETLAST  LR    R3,R2              LOAD LAST ADDRESS OF TABLE
+000262 5B30 F274            00274   110          S     R3,=F'4'           SUBTRACT 4 TO KEEP VALUE
+                                    111 *
+                                    112 ***** RETURN TO CALLING ROUTINE
+                                    113 *
+000266 9842 F2C8            002C8   114          LM    R4,R2,READSAVE     LOAD BACK TO REGISTERS
+00026A 07FE                         115          BR    R14                BRANCH BACK TO CALLING
+                                    116 *
+                                    117          LTORG
+000270 00000000                                  =F'0'
+000274 00000004                                  =F'4'
+                                    118 *
+                                    119 ****** BUILDTAB STORAGE AREA ******
+000278                              120 CARD     DS    CL80
+0002C8                              121 READSAVE DS    15F
+                                    122 *
+                                    123 **************************************************
+                                    124 *     TITLE 'PRINTTAB ROUTINE'                   *
+                                    125 **************************************************
+                                    126 *
+000304                              127 PRINTTAB DS    0H
+000304 900F F340            00340   128          STM   R0,R15,PRNTSAVE
+                                    129 *
+                                    130 ***** CHECK FOR END OF TABLE
+                                    131 *
+000308 1923                         132 PRINTLP  CR    R2,R3              COMPARE ADDRESSES
+00030A 4720 F324            00324   133          BH    PRINTEND           PRINT IF NOT AT END
+                                    134 *
+                                    135 ****** PRINT ONE TABLE ENTRY *****
+                                    136 *
+00030E 5802 0000            00000   137          L     R0,0(R2)           GET VALUE
+000312 5200 F331            00331   138          XDECO R0,PLINE           ADD VALUE TO LINE
+000316 E020 F330 000D 00330         139          XPRNT PLINE-1,13         PRINT THE VALUE
+                                    140 *
+                                    141 ****** INCREMENT THE TABLE POINTER
+                                    142 *
+00031C 4122 0004            00004   143          LA    R2,4(R2)           GET NEXT ENTRY
+000320 47F0 F308            00308   144          B     PRINTLP            GO PRINT AGAIN
+                                    145 *
+                                    146 ****** EXIT
+                                    147 *
+000324                              148 PRINTEND DS    0H
+                                    149 *        XPRNT =C'0 ',2           PRINT BLANK LINE
+000324 980F F340            00340   150          LM    R0,R15,PRNTSAVE    LOAD BACK INTO REGISTERS
+000328 07FE                         151          BR    R14                BRANCH BACK TO CALLING
+                                    152 *
+
+                                                                                                                            PAGE 4
+  LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
+
+                                    153          LTORG
+                                    154 *
+                                    155 ***** PRINTTAB STORAGE AREA
+                                    156 *
+000330 40                           157          DC    C' '
+000331                              158 PLINE    DS    CL12
+000340                              159 PRNTSAVE DS    16F
+                                    160 *
+                                    161 ********************************************
+                                    162 *     TITLE 'FINDDUP ROUTINE'              *
+                                    163 ********************************************
+                                    164 *
+000380                              165 FINDDUP  DS    0H
+000380 9086 F3E4            003E4   166          STM   R8,R6,DUPSAVE
+                                    167 *
+                                    168 ***** END OF TABLE?
+                                    169 *
+000384 4190 F16C            0016C   170          LA    R9,TABLE2          KEEPS TABLE2 ADDRESS
+000388 5802 0000            00000   171          L     R0,0(R2)           GET FIRST VALUE TABLE1
+00038C 5813 0000            00000   172          L     R1,0(R3)           GET FIRST VALUE TABLE2
+                                    173 *
+000390 1925                         174 END      CR    R2,R5              COMPARE ADDRESSES
+000392 4780 F3D6            003D6   175          BE    DONE               IF EQUAL BRANCH DONE
+000396 1901                         176 CMP      CR    R0,R1              COMPARE NUMBERS
+000398 4780 F3BE            003BE   177          BE    FOUND              IF EQUAL BRANCH FOUND
+00039C 4133 0004            00004   178          LA    R3,4(R3)           GET NEXT ADDRESS
+0003A0 5813 0000            00000   179          L     R1,0(R3)           GET NEXT VALUE
+0003A4 1936                         180          CR    R3,R6              COMPARE ADDRESSES TABLE2
+0003A6 4780 F3AE            003AE   181          BE    NEW                IF EQUAL BRANCH NEW
+0003AA 47F0 F396            00396   182          B     CMP                GO COMPARE NEXT NUMBER
+                                    183 *
+0003AE 4122 0004            00004   184 NEW      LA    R2,4(R2)           GET NEXT ADDRESS TABLE1
+0003B2 5802 0000            00000   185          L     R0,0(R2)           GET NEXT VALUE TABLE1
+0003B6 4139 0000            00000   186          LA    R3,0(R9)           GET FIRST ADDRESS TABLE2
+0003BA 47F0 F396            00396   187          B     CMP                GO COMPARE AGAIN
+                                    188 *
+0003BE 5004 0000            00000   189 FOUND    ST    R0,0(R4)           STORE DUPLICATE IN NEW TABLE
+0003C2 4144 0004            00004   190          LA    R4,4(R4)           POINT TO NEXT ENTRY
+0003C6 4122 0004            00004   191          LA    R2,4(R2)           POINT TO NEXT ENTRY TABLE1
+0003CA 5802 0000            00000   192          L     R0,0(R2)           GET NEXT NUMBER TABLE1
+0003CE 4139 0000            00000   193          LA    R3,0(R9)           GET TABLE2 ADDRESS
+0003D2 47F0 F390            00390   194          B     END                GO BACK TO END
+                                    195 *
+0003D6 1874                         196 DONE     LR    R7,R4              GET LAST ADDRESS OF TABLE3
+0003D8 5B70 F420            00420   197          S     R7,=F'4'           SUBTRACT 4 TO GET ADDRESS
+0003DC 9886 F3E4            003E4   198          LM    R8,R6,DUPSAVE      LOAD BACK TO REGISTERS
+0003E0 07FE                         199          BR    R14                GO BACK TO CALLING
+                                    200 *
+                                    201 **********DUPSAVE STORAGE AREA
+                                    202 *
+0003E4                              203 DUPSAVE  DS    15F
+                                    204          END   PROG6
+000420 00000004                                  =F'4'
+
+                                                                                                                            PAGE 5
+  LOC  OBJECT CODE    ADDR1 ADDR2   STMT    SOURCE STATEMENT
+
+
+***   0 STATEMENTS FLAGGED - 0 WARNINGS, 0 ERRORS
+
+*** PROGRAM EXECUTION BEGINNING -
+ANY OUTPUT BEFORE EXECUTION COMPLETE MESSAGE IS PRODUCED BY USER PROGRAM ***
+
+
+    TABLE ONE VALUES
+        1066
+        1883
+        2014
+        1492
+         980
+        1941
+        1950
+        1607
+        1588
+        1347
+        1917
+
+    TABLE TWO VALUES
+        1917
+         981
+        1588
+        1607
+         350
+        1347
+        2012
+        1066
+        1101
+        1860
+        1776
+        1500
+         165
+         800
+        1941
+        1999
+
+    DUPLICATE TABLE VALUES
+        1066
+        1941
+        1607
+        1588
+        1347
+        1917
+
+*** EXECUTION COMPLETED ***
+
